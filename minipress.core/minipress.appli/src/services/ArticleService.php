@@ -13,9 +13,11 @@ class ArticleService implements ArticleServiceInterface
 {
     public function listerArticlesPublies(?string $tri = null): array
     {
-        return Article::where('publie', true)->get()->map(fn($a) => [
-            'id'    => $a->id,
-            'titre' => $a->titre,
+        return Article::with('auteur')->where('publie', true)->get()->map(fn($a) => [
+            'id'            => $a->id,
+            'titre'         => $a->titre,
+            'date_creation' => $a->date_creation?->toDateTimeString(),
+            'auteur'        => ['id' => $a->auteur->id, 'email' => $a->auteur->email],
         ])->all();
     }
 
