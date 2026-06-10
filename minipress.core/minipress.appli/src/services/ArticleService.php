@@ -13,7 +13,10 @@ class ArticleService implements ArticleServiceInterface
 {
     public function listerArticlesPublies(?string $tri = null): array
     {
-        return [];
+        return Article::where('publie', true)->get()->map(fn($a) => [
+            'id'    => $a->id,
+            'titre' => $a->titre,
+        ])->all();
     }
 
     public function listerArticlesParCategorie(int $categorieId, ?string $tri = null): array
