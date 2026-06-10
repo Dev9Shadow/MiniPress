@@ -18,6 +18,7 @@ class ArticleService implements ArticleServiceInterface
             'titre'         => $a->titre,
             'date_creation' => $a->date_creation?->toDateTimeString(),
             'auteur'        => ['id' => $a->auteur->id, 'email' => $a->auteur->email],
+            'href'          => '/api/articles/' . $a->id,
         ])->all();
     }
 
