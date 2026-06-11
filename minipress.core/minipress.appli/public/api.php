@@ -9,6 +9,7 @@ use minipress\appli\controlers\api\ListerCategoriesAction;
 use minipress\appli\controlers\api\ListerArticlesAction;
 use minipress\appli\controlers\api\ListerArticlesCategorieAction;
 use minipress\appli\controlers\api\AfficherArticleAction;
+use minipress\appli\controlers\api\ListerArticlesAuteurAction;
 
 Eloquent::init(__DIR__ . '/../src/conf/minipress.db.conf.ini');
 
@@ -20,5 +21,6 @@ $app->get('/api/categories', ListerCategoriesAction::class);
 $app->get('/api/articles', ListerArticlesAction::class);
 $app->get('/api/categories/{id_categ}/articles', ListerArticlesCategorieAction::class);
 $app->get('/api/articles/{id_a}', AfficherArticleAction::class);
+$app->get('/api/auteurs/{id}/articles', ListerArticlesAuteurAction::class);
 
 $app->run();
