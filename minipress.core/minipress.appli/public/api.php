@@ -7,6 +7,7 @@ use Slim\Factory\AppFactory;
 use minipress\appli\utils\Eloquent;
 use minipress\appli\controlers\api\ListerCategoriesAction;
 use minipress\appli\controlers\api\ListerArticlesAction;
+use minipress\appli\controlers\api\ListerArticlesCategorieAction;
 
 Eloquent::init(__DIR__ . '/../src/conf/minipress.db.conf.ini');
 
@@ -16,5 +17,6 @@ $app->addErrorMiddleware(true, true, true);
 
 $app->get('/api/categories', ListerCategoriesAction::class);
 $app->get('/api/articles', ListerArticlesAction::class);
+$app->get('/api/categories/{id_categ}/articles', ListerArticlesCategorieAction::class);
 
 $app->run();
