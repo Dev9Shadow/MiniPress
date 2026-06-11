@@ -1,0 +1,9 @@
+{% extends 'layout.twig' %}
+{% block content %}
+<h1>Nouvelle categorie</h1>
+<form method="post" action="/admin/categories/new">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <p><label>Libelle <input type="text" name="libelle" required></label></p>
+    <button type="submit">Creer</button>
+</form>
+{% endblock %}
