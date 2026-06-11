@@ -1,0 +1,26 @@
+{% extends 'layout.twig' %}
+{% block content %}
+<h1>Articles</h1>
+<p><a href="/admin/articles/new">Nouvel article</a> | <a href="/admin/categories/new">Nouvelle categorie</a> | <a href="/admin/users/new">Nouvel utilisateur</a></p>
+<table>
+    <thead><tr><th>Titre</th><th>Auteur</th><th>Date</th><th>Statut</th><th>Action</th></tr></thead>
+    <tbody>
+    {% for a in articles %}
+    <tr>
+        <td>{{ a.titre }}</td>
+        <td>{{ a.auteur.email }}</td>
+        <td>{{ a.date_creation }}</td>
+        <td>{{ a.publie ? 'Publié' : 'Brouillon' }}</td>
+        <td>
+            <form method="post" action="/admin/articles/{{ a.id }}/publish" style="display:inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <button type="submit">{{ a.publie ? 'Dépublier' : 'Publier' }}</button>
+            </form>
+        </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">Aucun article.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
