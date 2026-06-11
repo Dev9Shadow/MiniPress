@@ -43,7 +43,23 @@ class ArticleService implements ArticleServiceInterface
 
     public function afficherArticle(int $id): array
     {
-        return [];
+        try {
+            $a = Article::with(['auteur', 'categorie'])
+                ->where('publie', true)
+                ->findOrFail($id);
+        } catch (ModelNotFoundException) {
+            throw new EntityNotFoundException("Article $id introuvable ou non publie");
+        }
+        return [
+            'id'            => $a->id,
+            'titre'         => $a->titre,
+            'resume'        => $a->resume,
+            'contenu'       => $a->contenu,
+            'image'         => $a->image,
+            'date_creation' => $a->date_creation?->toDateTimeString(),
+            'auteur'        => ['id' => $a->auteur->id, 'email' => $a->auteur->email],
+            'categorie'     => ['id' => $a->categorie->id, 'libelle' => $a->categorie->libelle],
+        ];
     }
 
     public function listerTousArticles(): array
