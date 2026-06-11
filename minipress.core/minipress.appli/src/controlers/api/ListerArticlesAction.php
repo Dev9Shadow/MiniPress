@@ -19,7 +19,8 @@ final class ListerArticlesAction
 
     public function __invoke(Request $rq, Response $rs, array $args): Response
     {
-        $articles = $this->service->listerArticlesPublies();
+        $tri = $rq->getQueryParams()['sort'] ?? null;
+        $articles = $this->service->listerArticlesPublies($tri);
         $rs->getBody()->write(json_encode($articles));
         return $rs->withHeader('Content-Type', 'application/json');
     }
