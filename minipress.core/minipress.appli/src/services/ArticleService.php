@@ -16,6 +16,9 @@ class ArticleService implements ArticleServiceInterface
         return match ($tri) {
             'date-asc'  => $query->orderBy('date_creation', 'asc'),
             'date-desc' => $query->orderBy('date_creation', 'desc'),
+            'auteur'    => $query->join('utilisateur', 'article.auteur_id', '=', 'utilisateur.id')
+                                 ->orderBy('utilisateur.email', 'asc')
+                                 ->select('article.*'),
             default     => $query->orderBy('date_creation', 'desc'),
         };
     }
