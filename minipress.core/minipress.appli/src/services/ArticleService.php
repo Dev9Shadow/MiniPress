@@ -11,9 +11,19 @@ use Illuminate\Database\QueryException;
 
 class ArticleService implements ArticleServiceInterface
 {
+    private function appliquerTri($query, ?string $tri)
+    {
+        return match ($tri) {
+            'date-asc'  => $query->orderBy('date_creation', 'asc'),
+            'date-desc' => $query->orderBy('date_creation', 'desc'),
+            default     => $query->orderBy('date_creation', 'desc'),
+        };
+    }
+
     public function listerArticlesPublies(?string $tri = null): array
     {
-        return Article::with('auteur')->where('publie', true)->get()->map(fn($a) => [
+        $q = Article::with('auteur')->where('publie', true);
+        return $this->appliquerTri($q, $tri)->get()->map(fn($a) => [
             'id'            => $a->id,
             'titre'         => $a->titre,
             'date_creation' => $a->date_creation?->toDateTimeString(),
@@ -24,30 +34,30 @@ class ArticleService implements ArticleServiceInterface
 
     public function listerArticlesParCategorie(int $categorieId, ?string $tri = null): array
     {
-        return Article::with('auteur')
+        $q = Article::with('auteur')
             ->where('publie', true)
-            ->where('categorie_id', $categorieId)
-            ->get()->map(fn($a) => [
-                'id'            => $a->id,
-                'titre'         => $a->titre,
-                'date_creation' => $a->date_creation?->toDateTimeString(),
-                'auteur'        => ['id' => $a->auteur->id, 'email' => $a->auteur->email],
-                'href'          => '/api/articles/' . $a->id,
-            ])->all();
+            ->where('categorie_id', $categorieId);
+        return $this->appliquerTri($q, $tri)->get()->map(fn($a) => [
+            'id'            => $a->id,
+            'titre'         => $a->titre,
+            'date_creation' => $a->date_creation?->toDateTimeString(),
+            'auteur'        => ['id' => $a->auteur->id, 'email' => $a->auteur->email],
+            'href'          => '/api/articles/' . $a->id,
+        ])->all();
     }
 
     public function listerArticlesParAuteur(int $auteurId, ?string $tri = null): array
     {
-        return Article::with('auteur')
+        $q = Article::with('auteur')
             ->where('publie', true)
-            ->where('auteur_id', $auteurId)
-            ->get()->map(fn($a) => [
-                'id'            => $a->id,
-                'titre'         => $a->titre,
-                'date_creation' => $a->date_creation?->toDateTimeString(),
-                'auteur'        => ['id' => $a->auteur->id, 'email' => $a->auteur->email],
-                'href'          => '/api/articles/' . $a->id,
-            ])->all();
+            ->where('auteur_id', $auteurId);
+        return $this->appliquerTri($q, $tri)->get()->map(fn($a) => [
+            'id'            => $a->id,
+            'titre'         => $a->titre,
+            'date_creation' => $a->date_creation?->toDateTimeString(),
+            'auteur'        => ['id' => $a->auteur->id, 'email' => $a->auteur->email],
+            'href'          => '/api/articles/' . $a->id,
+        ])->all();
     }
 
     public function afficherArticle(int $id): array
