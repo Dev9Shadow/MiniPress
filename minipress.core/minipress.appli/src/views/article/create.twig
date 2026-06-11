@@ -1,0 +1,17 @@
+{% extends 'layout.twig' %}
+{% block content %}
+<h1>Nouvel article</h1>
+<form method="post" action="/admin/articles/new">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <p><label>Titre <input type="text" name="titre" required></label></p>
+    <p><label>Resume (markdown)<br><textarea name="resume"></textarea></label></p>
+    <p><label>Contenu (markdown)<br><textarea name="contenu" required></textarea></label></p>
+    <p><label>Image (URL) <input type="url" name="image"></label></p>
+    <p><label>Categorie
+        <select name="categorie_id" required>
+        {% for c in categories %}<option value="{{ c.id }}">{{ c.libelle }}</option>{% endfor %}
+        </select>
+    </label></p>
+    <button type="submit">Creer</button>
+</form>
+{% endblock %}
