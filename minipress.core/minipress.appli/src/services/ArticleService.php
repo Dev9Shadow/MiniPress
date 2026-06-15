@@ -29,6 +29,7 @@ class ArticleService implements ArticleServiceInterface
         return $this->appliquerTri($q, $tri)->get()->map(fn($a) => [
             'id'            => $a->id,
             'titre'         => $a->titre,
+            'resume'        => $a->resume,
             'date_creation' => $a->date_creation?->toDateTimeString(),
             'auteur'        => ['id' => $a->auteur->id, 'email' => $a->auteur->email],
             'href'          => '/api/articles/' . $a->id,
@@ -43,6 +44,7 @@ class ArticleService implements ArticleServiceInterface
         return $this->appliquerTri($q, $tri)->get()->map(fn($a) => [
             'id'            => $a->id,
             'titre'         => $a->titre,
+            'resume'        => $a->resume,
             'date_creation' => $a->date_creation?->toDateTimeString(),
             'auteur'        => ['id' => $a->auteur->id, 'email' => $a->auteur->email],
             'href'          => '/api/articles/' . $a->id,
@@ -57,6 +59,7 @@ class ArticleService implements ArticleServiceInterface
         return $this->appliquerTri($q, $tri)->get()->map(fn($a) => [
             'id'            => $a->id,
             'titre'         => $a->titre,
+            'resume'        => $a->resume,
             'date_creation' => $a->date_creation?->toDateTimeString(),
             'auteur'        => ['id' => $a->auteur->id, 'email' => $a->auteur->email],
             'href'          => '/api/articles/' . $a->id,
@@ -86,13 +89,45 @@ class ArticleService implements ArticleServiceInterface
 
     public function listerTousArticles(): array
     {
-        return [];
+        return Article::with('auteur')->get()->map(fn($a) => [
+            'id'            => $a->id,
+            'titre'         => $a->titre,
+            'resume'        => $a->resume,
+            'date_creation' => $a->date_creation?->toDateTimeString(),
+            'auteur'        => ['id' => $a->auteur->id, 'email' => $a->auteur->email],
+            'publie'        => $a->publie,
+        ])->all();
     }
 
     public function creerArticle(array $data, int $auteurId): int
     {
-        return 0;
+        try {
+            $article = Article::create([
+                'titre'        => $data['titre'],
+                'resume'       => $data['resume'] ?? null,
+                'contenu'      => $data['contenu'],
+                'image'        => $data['image'] ?? null,
+                'categorie_id' => $data['categorie_id'],
+                'auteur_id'    => $auteurId,
+                'publie'       => false,
+                'date_creation'=> now(),
+            ]);
+            return $article->id;
+        } catch (\Exception $e) {
+            throw new InternalErrorException('Erreur creation article', 0, $e);
+        }
     }
 
-    public function basculerPublication(int $id): void {}
+    public function basculerPublication(int $id): void
+    {
+        try {
+            $article = Article::findOrFail($id);
+            $article->publie = !$article->publie;
+            $article->save();
+        } catch (ModelNotFoundException) {
+            throw new EntityNotFoundException("Article $id introuvable");
+        } catch (\Exception $e) {
+            throw new InternalErrorException('Erreur bascule publication', 0, $e);
+        }
+    }
 }
