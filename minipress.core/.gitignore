@@ -1,0 +1,4 @@
+.env
+minipress.appli/src/vendor/
+minipress.appli/src/composer.lock
+minipress.appli/src/conf/minipress.db.conf.ini
