@@ -1,16 +1,24 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import '../models/article.dart';
 import '../models/article_resume.dart';
 import '../models/categorie.dart';
+import 'api_exception.dart';
 
 const String _base = 'http://docketu.iutnc.univ-lorraine.fr:57000/api';
 
 class ApiService {
   static Future<T> _get<T>(String url, T Function(dynamic) parse) async {
-    final res = await http.get(Uri.parse(url));
-    if (res.statusCode != 200) throw Exception('Erreur HTTP ${res.statusCode}');
-    return parse(jsonDecode(res.body));
+    try {
+      final res = await http.get(Uri.parse(url));
+      if (res.statusCode != 200) {
+        throw ApiException(res.statusCode, 'Erreur serveur');
+      }
+      return parse(jsonDecode(utf8.decode(res.bodyBytes)));
+    } on SocketException {
+      throw const ApiException(0, 'Pas de connexion réseau');
+    }
   }
 
   static Future<List<Categorie>> fetchCategories() => _get(
