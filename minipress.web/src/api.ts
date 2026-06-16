@@ -28,12 +28,14 @@ export async function fetchArticlesByAuteur(id: number): Promise<ArticleResume[]
     return get<ArticleResume[]>(`${API}/auteurs/${id}/articles`);
 }
 
+// feature 7 : filtre par titre uniquement
 export function filtrerParTitre(articles: ArticleResume[], motCle: string): ArticleResume[] {
     if (!motCle.trim()) return articles;
     const kw = motCle.toLowerCase();
     return articles.filter(a => a.titre.toLowerCase().includes(kw));
 }
 
+// feature 8 : filtre par titre ou resume
 export function filtrerParTitreOuResume(articles: ArticleResume[], motCle: string): ArticleResume[] {
     if (!motCle.trim()) return articles;
     const kw = motCle.toLowerCase();
