@@ -4,6 +4,7 @@ import {
     fetchCategories,
     fetchArticlesByCategorie,
     fetchArticlesByAuteur,
+    filtrerParTitreOuResume,
 } from './api.js';
 import {
     renderCategories,
@@ -11,6 +12,7 @@ import {
     renderArticle,
     renderLoading,
     renderError,
+    setActiveSort,
 } from './ui.js';
 import type { ArticleResume } from './types.js';
 
@@ -28,6 +30,8 @@ class App {
     async init(): Promise<void> {
         await this.loadCategories();
         await this.loadList(this.loader, this.titre);
+        this.bindSortEvents();
+        this.bindSearchEvent();
 
         document.getElementById('home-link')?.addEventListener('click', e => {
             e.preventDefault();
@@ -61,19 +65,26 @@ class App {
         renderLoading();
         try {
             this.articles = await loader(this.sort);
-            renderArticleList(
-                this.articles,
-                titre,
-                (id) => this.showArticle(id),
-                (auteurId, email) => {
-                    this.loader = (_s) => fetchArticlesByAuteur(auteurId);
-                    this.titre  = `Articles de ${email}`;
-                    this.loadList(this.loader, this.titre);
-                }
-            );
+            const motCle  = (document.getElementById('search-input') as HTMLInputElement)?.value ?? '';
+            const filtered = filtrerParTitreOuResume(this.articles, motCle);
+            this.renderList(filtered);
+            setActiveSort(this.sort);
         } catch {
             renderError('Impossible de charger les articles.');
         }
+    }
+
+    private renderList(articles: ArticleResume[]): void {
+        renderArticleList(
+            articles,
+            this.titre,
+            (id) => this.showArticle(id),
+            (auteurId, email) => {
+                this.loader = (_s) => fetchArticlesByAuteur(auteurId);
+                this.titre  = `Articles de ${email}`;
+                this.loadList(this.loader, this.titre);
+            }
+        );
     }
 
     private async showArticle(id: number): Promise<void> {
@@ -84,6 +95,23 @@ class App {
         } catch {
             renderError('Article introuvable.');
         }
+    }
+
+    private bindSortEvents(): void {
+        document.querySelectorAll<HTMLElement>('[data-sort]').forEach(el => {
+            el.addEventListener('click', () => {
+                this.sort = el.dataset.sort!;
+                this.loadList(this.loader, this.titre);
+            });
+        });
+    }
+
+    private bindSearchEvent(): void {
+        document.getElementById('search-input')?.addEventListener('input', () => {
+            const motCle   = (document.getElementById('search-input') as HTMLInputElement).value;
+            const filtered = filtrerParTitreOuResume(this.articles, motCle);
+            this.renderList(filtered);
+        });
     }
 }
 
