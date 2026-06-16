@@ -2,8 +2,9 @@
   "name": "minipress-web",
   "version": "1.0.0",
   "scripts": {
-    "build": "esbuild src/main.ts --bundle --outfile=public/js/app.js --minify",
-    "dev":   "esbuild src/main.ts --bundle --outfile=public/js/app.js --watch"
+    "build":  "esbuild src/main.ts --bundle --outfile=public/js/app.js --minify",
+    "dev":    "esbuild src/main.ts --bundle --outfile=public/js/app.js --watch",
+    "deploy": "node deploy.js"
   },
   "dependencies": {
     "handlebars": "^4.7.8",
