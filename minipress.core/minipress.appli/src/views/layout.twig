@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>MiniPress Admin</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: sans-serif; margin: 0; background: #f4f4f4; }
+        header { background: #222; color: #fff; padding: .8rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        header a { color: #fff; text-decoration: none; }
+        nav a { margin-left: 1.2rem; }
+        main { max-width: 960px; margin: 2rem auto; background: #fff; padding: 2rem; border-radius: 4px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: .5rem .8rem; text-align: left; border-bottom: 1px solid #eee; }
+        form.inline { display: inline; }
+        button { cursor: pointer; }
+    </style>
+</head>
+<body>
+<header>
+    <a href="/admin/articles"><strong>MiniPress</strong></a>
+    <nav>
+        <a href="/admin/articles">Articles</a>
+        <a href="/admin/categories/new">Categorie</a>
+        <a href="/admin/users/new">Utilisateur</a>
+        <form class="inline" method="post" action="/logout">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token|default('') }}">
+            <button type="submit" style="background:none;border:none;color:#ccc;cursor:pointer;padding:0;margin-left:1.2rem">Deconnexion</button>
+        </form>
+    </nav>
+</header>
+<main>
+{% block content %}{% endblock %}
+</main>
+</body>
+</html>

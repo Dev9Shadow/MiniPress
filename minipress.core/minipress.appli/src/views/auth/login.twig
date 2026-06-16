@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>MiniPress - Connexion</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f4f4f4; }
+        form { background: #fff; padding: 2rem; border-radius: 4px; width: 320px; }
+        h1 { margin: 0 0 1.2rem; font-size: 1.4rem; }
+        label { display: block; margin-bottom: 1rem; font-size: .9rem; }
+        input[type=email], input[type=password] { display: block; width: 100%; padding: .45rem .6rem; margin-top: .3rem; border: 1px solid #ccc; border-radius: 3px; }
+        button[type=submit] { width: 100%; padding: .6rem; background: #222; color: #fff; border: none; border-radius: 3px; font-size: 1rem; }
+        .erreur { color: #c00; margin-bottom: 1rem; font-size: .9rem; }
+    </style>
+</head>
+<body>
+<form method="post" action="/login">
+    <h1>Connexion</h1>
+    {% if erreur is defined %}<p class="erreur">{{ erreur }}</p>{% endif %}
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label>Email<input type="email" name="email" required autofocus></label>
+    <label>Mot de passe<input type="password" name="password" required></label>
+    <button type="submit">Se connecter</button>
+</form>
+</body>
+</html>
