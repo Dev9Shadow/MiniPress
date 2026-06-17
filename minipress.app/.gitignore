@@ -3,3 +3,10 @@ build/
 .flutter-plugins
 .flutter-plugins-dependencies
 pubspec.lock
+.idea/
+*.iml
+.metadata
+linux/
+macos/
+windows/
+README.md
