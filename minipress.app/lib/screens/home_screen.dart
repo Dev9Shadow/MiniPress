@@ -64,41 +64,58 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: Row(
-        children: [
-          SizedBox(
-            width: 200,
-            child: FutureBuilder<List<Categorie>>(
-              future: _categoriesFuture,
-              builder: (ctx, snap) {
-                if (!snap.hasData) return const Center(child: CircularProgressIndicator());
-                return ListView(
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.home),
-                      title: const Text('Tous les articles'),
-                      onTap: () => setState(() { _sort = 'date-desc'; _reload(); }),
-                    ),
-                    const Divider(),
-                    ...snap.data!.map((c) => ListTile(
-                      leading: const Icon(Icons.folder_outlined),
-                      title: Text(c.libelle),
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => CategorieArticlesScreen(categorie: c)),
-                      ),
-                    )),
-                  ],
-                );
-              },
-            ),
+      drawer: Drawer(
+        child: SafeArea(
+          child: Column(
+            children: [
+              ListTile(
+                title: const Text('Catégories', style: TextStyle(fontSize: 20)),
+                trailing: IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+              const Divider(height: 1),
+              Expanded(
+                child: FutureBuilder<List<Categorie>>(
+                  future: _categoriesFuture,
+                  builder: (ctx, snap) {
+                    if (!snap.hasData) return const Center(child: CircularProgressIndicator());
+                    return ListView(
+                      children: [
+                        ListTile(
+                          leading: const Icon(Icons.home),
+                          title: const Text('Tous les articles'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            setState(() { _sort = 'date-desc'; _reload(); });
+                          },
+                        ),
+                        const Divider(),
+                        ...snap.data!.map((c) => ListTile(
+                          leading: const Icon(Icons.folder_outlined),
+                          title: Text(c.libelle),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => CategorieArticlesScreen(categorie: c)),
+                            );
+                          },
+                        )),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
-          const VerticalDivider(width: 1),
-          Expanded(
-            child: Column(
-              children: [
-                Padding(
+        ),
+      ),
+      body: Column(
+        children: [
+          Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -149,9 +166,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                 ),
-              ],
-            ),
-          ),
         ],
       ),
     );
