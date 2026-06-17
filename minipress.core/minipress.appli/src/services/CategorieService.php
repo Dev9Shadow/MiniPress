@@ -20,6 +20,11 @@ class CategorieService implements CategorieServiceInterface
 
     public function creerCategorie(array $data): int
     {
-        return 0;
+        try {
+            $categorie = Categorie::create(['libelle' => $data['libelle']]);
+            return $categorie->id;
+        } catch (QueryException $e) {
+            throw new InternalErrorException('Erreur creation categorie', 0, $e);
+        }
     }
 }
