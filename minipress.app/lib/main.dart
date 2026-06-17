@@ -12,8 +12,13 @@ class MinipressApp extends StatelessWidget {
       title: 'MiniPress',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.indigo,
+          brightness: Brightness.light,
+        ),
         useMaterial3: true,
+        cardTheme: const CardTheme(elevation: 2),
+        dividerTheme: const DividerThemeData(thickness: 1),
       ),
       home: const HomeScreen(),
     );
