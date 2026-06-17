@@ -17,7 +17,7 @@ class MinipressApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
         useMaterial3: true,
-        cardTheme: const CardTheme(elevation: 2),
+        cardTheme: const CardThemeData(elevation: 2),
         dividerTheme: const DividerThemeData(thickness: 1),
       ),
       home: const HomeScreen(),
