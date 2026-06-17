@@ -101,23 +101,29 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text('Trier : ', style: TextStyle(color: Colors.grey)),
-                      TextButton.icon(
-                        icon: const Icon(Icons.arrow_downward, size: 16),
-                        label: const Text('Plus récent'),
-                        style: _sort == 'date-desc'
-                            ? TextButton.styleFrom(backgroundColor: Colors.indigo.shade50)
-                            : null,
-                        onPressed: () => setState(() { _sort = 'date-desc'; _reload(); }),
-                      ),
-                      TextButton.icon(
-                        icon: const Icon(Icons.arrow_upward, size: 16),
-                        label: const Text('Plus ancien'),
-                        style: _sort == 'date-asc'
-                            ? TextButton.styleFrom(backgroundColor: Colors.indigo.shade50)
-                            : null,
-                        onPressed: () => setState(() { _sort = 'date-asc'; _reload(); }),
+                      PopupMenuButton<String>(
+                        initialValue: _sort,
+                        onSelected: (value) => setState(() { _sort = value; _reload(); }),
+                        itemBuilder: (context) => const [
+                          PopupMenuItem(
+                            value: 'date-desc',
+                            child: Text('Plus récent'),
+                          ),
+                          PopupMenuItem(
+                            value: 'date-asc',
+                            child: Text('Plus ancien'),
+                          ),
+                        ],
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(_sort == 'date-asc' ? 'Plus ancien' : 'Plus récent'),
+                            const Icon(Icons.arrow_drop_down),
+                          ],
+                        ),
                       ),
                     ],
                   ),
