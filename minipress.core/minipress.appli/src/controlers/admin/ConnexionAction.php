@@ -34,8 +34,9 @@ final class ConnexionAction
             ]);
         }
         session_regenerate_id(true);
-        $_SESSION['utilisateur_id'] = $utilisateur['id'];
-        $_SESSION['csrf_token']     = bin2hex(random_bytes(32));
+        $_SESSION['utilisateur_id']   = $utilisateur['id'];
+        $_SESSION['utilisateur_role'] = $utilisateur['role'];
+        $_SESSION['csrf_token']       = bin2hex(random_bytes(32));
         return $rs->withHeader('Location', '/admin/articles')->withStatus(302);
     }
 }

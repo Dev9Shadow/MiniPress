@@ -5,6 +5,7 @@ namespace minipress\appli\controlers\admin;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use minipress\appli\models\Article;
 use minipress\appli\services\ArticleService;
 use minipress\appli\services\ArticleServiceInterface;
 use minipress\appli\services\exceptions\EntityNotFoundException;
@@ -21,10 +22,17 @@ final class PublierArticleAction
 
     public function __invoke(Request $rq, Response $rs, array $args): Response
     {
-        try {
-            $this->service->basculerPublication((int) $args['id']);
-        } catch (EntityNotFoundException | InternalErrorException) {
-            // silencieux, on redirige dans tous les cas
+        $id      = (int) $args['id'];
+        $userId  = (int) ($_SESSION['utilisateur_id'] ?? 0);
+        $role    = (string) ($_SESSION['utilisateur_role'] ?? '');
+
+        $article = Article::find($id);
+        if ($article && ($role === 'admin' || $article->auteur_id === $userId)) {
+            try {
+                $this->service->basculerPublication($id);
+            } catch (EntityNotFoundException | InternalErrorException) {
+                // silencieux
+            }
         }
         return $rs->withHeader('Location', '/admin/articles')->withStatus(302);
     }
