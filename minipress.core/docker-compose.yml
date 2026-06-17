@@ -58,6 +58,7 @@ services:
   adminer:
     image: adminer
     restart: unless-stopped
+    command: php -S 0.0.0.0:8080 -t /var/www/html
     ports:
       - "${ADMINER_PORT}:8080"
     depends_on:
