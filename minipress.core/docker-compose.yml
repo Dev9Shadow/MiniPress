@@ -7,6 +7,8 @@ services:
       MARIADB_USER: ${DB_USERNAME}
       MARIADB_PASSWORD: ${DB_PASSWORD}
       MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    ports:
+      - "${DB_PORT}:3306"
     volumes:
       - db_data:/var/lib/mysql
       - ./sql/minipress.schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
@@ -52,6 +54,14 @@ services:
     depends_on:
       - api
       - admin
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - "${ADMINER_PORT}:8080"
+    depends_on:
+      - db
 
 volumes:
   db_data:

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiniPress</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <a href="#" id="home-link"><strong>MiniPress</strong></a>
+    <div class="toolbar">
+        <input type="search" id="search-input" placeholder="Filtrer les articles...">
+        <div class="sort-btns">
+            <button data-sort="date-desc" class="actif">Plus récents</button>
+            <button data-sort="date-asc">Plus anciens</button>
+            <button data-sort="auteur">Par auteur</button>
+        </div>
+    </div>
+</header>
+
+<div class="layout">
+    <aside id="sidebar">
+        <h2>Catégories</h2>
+        <div id="categories-list"><p class="chargement">Chargement...</p></div>
+    </aside>
+    <main id="main-content">
+        <p class="chargement">Chargement...</p>
+    </main>
+</div>
+
+<!-- Template : liste des catégories -->
+<script id="tpl-categories" type="text/x-handlebars-template">
+    <ul class="cat-list">
+    {{#each categories}}
+        <li>
+            <a href="#" data-id="{{id}}" data-libelle="{{libelle}}">{{libelle}}</a>
+        </li>
+    {{/each}}
+    </ul>
+</script>
+
+<!-- Template : liste des articles -->
+<script id="tpl-articles" type="text/x-handlebars-template">
+    <h1>{{titre}}</h1>
+    {{#if articles.length}}
+    <ul class="article-list">
+    {{#each articles}}
+        <li class="article-item">
+            <a href="#" class="article-titre" data-article-id="{{id}}">{{titre}}</a>
+            <span class="article-meta">
+                {{formatDate date_creation}} —
+                <a href="#" data-auteur-id="{{auteur.id}}" data-auteur-email="{{auteur.email}}">{{auteur.email}}</a>
+            </span>
+        </li>
+    {{/each}}
+    </ul>
+    {{else}}
+    <p>Aucun article trouvé.</p>
+    {{/if}}
+</script>
+
+<!-- Template : article complet -->
+<script id="tpl-article" type="text/x-handlebars-template">
+    <button id="btn-back">← Retour</button>
+    <article>
+        <h1>{{titre}}</h1>
+        <p class="article-meta">
+            {{formatDate date_creation}} — {{auteur.email}} — {{categorie.libelle}}
+        </p>
+        {{#if image}}
+        <img src="{{image}}" alt="{{titre}}" class="article-img">
+        {{/if}}
+        {{#if resumeHtml}}
+        <div class="resume">{{{resumeHtml}}}</div>
+        {{/if}}
+        <div class="contenu">{{{contenuHtml}}}</div>
+    </article>
+</script>
+
+<script src="js/app.js"></script>
+</body>
+</html>

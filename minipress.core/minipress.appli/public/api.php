@@ -19,6 +19,12 @@ $app->addRoutingMiddleware();
 $app->addBodyParsingMiddleware();
 $app->addErrorMiddleware(true, true, true);
 
+$app->add(function ($rq, $handler) {
+    return $handler->handle($rq)
+        ->withHeader('Access-Control-Allow-Origin', '*')
+        ->withHeader('Access-Control-Allow-Methods', 'GET');
+});
+
 // Table de routage API (lecture seule, JSON)
 $app->get('/api/categories', ListerCategoriesAction::class);
 $app->get('/api/articles', ListerArticlesAction::class);
