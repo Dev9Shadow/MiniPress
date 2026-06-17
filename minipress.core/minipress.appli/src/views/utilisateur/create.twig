@@ -1,0 +1,10 @@
+{% extends 'layout.twig' %}
+{% block content %}
+<h1>Nouvel utilisateur</h1>
+<form method="post" action="/admin/users/new">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <p><label>Email <input type="email" name="email" required></label></p>
+    <p><label>Mot de passe <input type="password" name="password" required></label></p>
+    <button type="submit">Créer</button>
+</form>
+{% endblock %}

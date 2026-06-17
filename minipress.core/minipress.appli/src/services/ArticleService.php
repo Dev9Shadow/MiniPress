@@ -110,7 +110,7 @@ class ArticleService implements ArticleServiceInterface
                 'categorie_id' => $data['categorie_id'],
                 'auteur_id'    => $auteurId,
                 'publie'       => false,
-                'date_creation'=> now(),
+                'date_creation'=> date('Y-m-d H:i:s'),
             ]);
             return $article->id;
         } catch (\Exception $e) {
