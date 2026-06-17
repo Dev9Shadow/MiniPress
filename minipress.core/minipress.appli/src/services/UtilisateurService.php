@@ -14,7 +14,7 @@ class UtilisateurService implements UtilisateurServiceInterface
             $utilisateur = Utilisateur::create([
                 'email'    => $data['email'],
                 'password' => password_hash($data['password'], PASSWORD_BCRYPT),
-                'role'     => $data['role'] ?? 'redacteur',
+                'role'     => $data['role'] ?? 'auteur',
             ]);
             return $utilisateur->id;
         } catch (\Exception $e) {
