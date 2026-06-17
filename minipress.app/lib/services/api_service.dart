@@ -6,7 +6,7 @@ import '../models/article_resume.dart';
 import '../models/categorie.dart';
 import 'api_exception.dart';
 
-const String _base = 'http://docketu.iutnc.univ-lorraine.fr:57000/api';
+const String _base = 'http://docketu.iutnc.univ-lorraine.fr:57320/api';
 
 class ApiService {
   static Future<T> _get<T>(String url, T Function(dynamic) parse) async {
